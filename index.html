@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web3 Expense Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-mode">
+    <!-- Animated Background Canvas -->
+    <canvas id="bgCanvas"></canvas>
+    
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="web3-title">
+                <span class="glow-text">⬡</span>
+                <span class="title-main">Web3 Expense Tracker</span>
+                <span class="glow-text">⬡</span>
+            </h1>
+            <button class="theme-toggle" id="themeToggle">
+                <span class="theme-icon">🌙</span>
+            </button>
+        </header>
+
+        <!-- Balance Summary Cards -->
+        <section class="balance-summary">
+            <div class="balance-card income-card" data-tilt>
+                <div class="card-icon">📈</div>
+                <div class="card-label">Total Income</div>
+                <div class="card-amount" id="totalIncome">₹0.00</div>
+            </div>
+            <div class="balance-card balance-card-main" data-tilt>
+                <div class="card-icon">💰</div>
+                <div class="card-label">Current Balance</div>
+                <div class="card-amount" id="currentBalance">₹0.00</div>
+            </div>
+            <div class="balance-card expense-card" data-tilt>
+                <div class="card-icon">📉</div>
+                <div class="card-label">Total Expense</div>
+                <div class="card-amount" id="totalExpense">₹0.00</div>
+            </div>
+        </section>
+
+        <!-- Add Transaction Form -->
+        <section class="glass-panel form-panel">
+            <h2 class="section-title">
+                <span class="neon-line"></span>
+                Add Transaction
+                <span class="neon-line"></span>
+            </h2>
+            <form id="transactionForm" class="transaction-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" id="title" placeholder="Enter title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="amount">Amount</label>
+                        <input type="number" id="amount" placeholder="0.00" step="0.01" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" required>
+                            <option value="">Select Category</option>
+                            <option value="Food">🍔 Food</option>
+                            <option value="Transport">🚗 Transport</option>
+                            <option value="Shopping">🛍️ Shopping</option>
+                            <option value="Bills">💡 Bills</option>
+                            <option value="Entertainment">🎮 Entertainment</option>
+                            <option value="Health">🏥 Health</option>
+                            <option value="Education">📚 Education</option>
+                            <option value="Salary">💼 Salary</option>
+                            <option value="Investment">📊 Investment</option>
+                            <option value="Other">📦 Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="paymentMethod">Payment Method</label>
+                        <select id="paymentMethod" required>
+                            <option value="Cash">💵 Cash</option>
+                            <option value="Card">💳 Card</option>
+                            <option value="UPI">📱 UPI</option>
+                            <option value="Crypto">₿ Crypto Wallet</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="type">Type</label>
+                        <select id="type" required>
+                            <option value="Expense">📤 Expense</option>
+                            <option value="Income">📥 Income</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description (Optional)</label>
+                    <textarea id="description" placeholder="Add notes..." rows="2"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    <span class="btn-glow"></span>
+                    Add Transaction
+                </button>
+            </form>
+        </section>
+
+        <!-- Filters & Search -->
+        <section class="glass-panel filter-panel">
+            <div class="filter-row">
+                <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search transactions...">
+                < select id="filterCategory" class="filter-select">
+                    <option value="">All Categories</option>
+                    <option value="Food">Food</option>
+                    <option value="Transport">Transport</option>
+                    <option value="Shopping">Shopping</option>
+                    <option value="Bills">Bills</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Health">Health</option>
+                    <option value="Education">Education</option>
+                    <option value="Salary">Salary</option>
+                    <option value="Investment">Investment</option>
+                    <option value="Other">Other</option>
+                </select>
+                < select id="filterType" class="filter-select">
+                    <option value="">All Types</option>
+                    <option value="Income">Income</option>
+                    <option value="Expense">Expense</option>
+                </select>
+                < select id="filterPayment" class="filter-select">
+                    <option value="">All Payment Methods</option>
+                    <option value="Cash">Cash</option>
+                    <option value="Card">Card</option>
+                    <option value="UPI">UPI</option>
+                    <option value="Crypto">Crypto</option>
+                </select>
+                <div class="export-buttons">
+                    <button class="btn btn-secondary" id="exportCSV">Export CSV</button>
+                    <button class="btn btn-secondary" id="exportJSON">Export JSON</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Transactions List -->
+        <section class="glass-panel">
+            <h2 class="section-title">
+                <span class="neon-line"></span>
+                Transactions
+                <span class="neon-line"></span>
+            </h2>
+            <div id="transactionsList" class="transactions-list"></div>
+        </section>
+
+        <!-- Charts Section -->
+        <section class="charts-section">
+            <div class="glass-panel chart-panel">
+                <h3 class="chart-title">Category-wise Spending</h3>
+                <canvas id="pieChart"></canvas>
+            </div>
+            <div class="glass-panel chart-panel">
+                <h3 class="chart-title">Income vs Expense</h3>
+                <canvas id="barChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-line"></div>
+            <!-- <p class="footer-text">Built with Web3 aesthetics ⬡ Powered by Blockchain Vibes</p> -->
+            <p class="footer-text">Made by Lakshita Kannaujia</p>
+            <div class="footer-line"></div>
+        </footer>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer"></div>
+
+    <script src="bg-animation.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
